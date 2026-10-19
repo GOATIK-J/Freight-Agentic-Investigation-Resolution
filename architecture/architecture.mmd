@@ -1,0 +1,31 @@
+graph TD
+    A[Exception Alert] --> B[Intake & Triage Agent]
+    B --> C[Investigation Planner Agent]
+    C --> D[Evidence Collector Agent]
+    D --> E{Evidence Gap > 30%?}
+    E -->|Yes| F[Human Gate]
+    E -->|No| G[Resolver Agent]
+    G --> H[Critic Agent]
+    H --> I{Critic Verdict}
+    I -->|VALID| J{Human Review Required?}
+    I -->|REVISE| K[Bounded Revision Loop]
+    I -->|REJECT| F
+    K --> G
+    K -->|2nd Failure| F
+    J -->|Yes| F
+    J -->|No| L[Auto-Resolve]
+    F --> M[Human Decision]
+    M --> N[Approve / Override / Reject]
+    L --> O[Append-Only Audit Log]
+    N --> O
+    P[(SQLite Synthetic DB)] --> D
+    P --> Q[10 Query Tools]
+    Q --> D
+    style B fill:#1a2744,color:#fff
+    style C fill:#1a2744,color:#fff
+    style D fill:#1a2744,color:#fff
+    style G fill:#1a2744,color:#fff
+    style H fill:#fd7e14,color:#fff
+    style F fill:#dc3545,color:#fff
+    style L fill:#28a745,color:#fff
+    style O fill:#6c757d,color:#fff
